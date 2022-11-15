@@ -42,7 +42,6 @@ class MyFunction:
 
         if cursor.rowcount == 1:
             print("\nData Berhasil Ditambah!!!\n")
-            print("~"*50)
             self.showTable()
             self.nextstep()
 
@@ -56,7 +55,6 @@ class MyFunction:
 
         if cursor.rowcount == 1:
             print("\nData Berhasil Dihapus!!!\n")
-            print("~"*50)
             self.showTable()
             self.nextstep()
             
@@ -78,7 +76,7 @@ class MyFunction:
 
         # print(nama, alamat, noTelp, tglPesan)
 
-        queryUpdate = f"UPDATE {self.tableName} SET nama_penumpang='{nama}' alamat='{alamat}' no_telp={noTelp} tgl_pemesanan='{tglPesan}' WHERE id={getRow['id']}"
+        queryUpdate = f"UPDATE {self.tableName} SET nama_penumpang='{nama}', alamat='{alamat}', no_telp={noTelp}, tgl_pemesanan='{tglPesan}' WHERE id={getRow['id']}"
 
         # print(queryUpdate)
 
@@ -88,7 +86,6 @@ class MyFunction:
 
         if cursor.rowcount == 1:
             print("\nData Berhasil Diperbarui!!!\n")
-            print("~"*50)
             self.showTable()
             self.nextstep()
 
