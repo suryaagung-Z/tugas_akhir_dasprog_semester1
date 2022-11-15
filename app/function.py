@@ -2,6 +2,7 @@ from .connect_db import conn
 from prettytable import PrettyTable
 
 class MyFunction:
+    # Contructor
     def __init__(self):
         self.tableName = 'pendaftaran_bis'
 
@@ -22,6 +23,7 @@ class MyFunction:
             no+=1
         print(f"{pt} \n")
     
+    # Function Mendapatkan data berdasarkan nomor baris
     def getByRow(self, row):
         row    = int(row)-1
         query  = f"SELECT * FROM {self.tableName} LIMIT {row}, 1"
@@ -45,6 +47,7 @@ class MyFunction:
             self.showTable()
             self.nextstep()
 
+    # Function Hapus Data
     def delete(self, row):
         getRow = self.getByRow(row)
         queryDelete = f"DELETE FROM {self.tableName} WHERE id={getRow['id']}"
@@ -58,11 +61,10 @@ class MyFunction:
             self.showTable()
             self.nextstep()
             
+    # Function Perbarui Data
     def update(self, row):
         getRow = self.getByRow(row)
         d = "skip"
-        # for val in getRow:
-        #     print(getRow[val], type(getRow[val]))
         
         nama     = input(f"Nama : {getRow['nama_penumpang']} -> ")
         alamat   = input(f"Alamat : {getRow['alamat']} -> ")
@@ -74,11 +76,7 @@ class MyFunction:
         noTelp   = int(noTelp) if (noTelp != d) else getRow['no_telp']
         tglPesan = tglPesan if (tglPesan != d) else getRow['tgl_pemesanan']
 
-        # print(nama, alamat, noTelp, tglPesan)
-
         queryUpdate = f"UPDATE {self.tableName} SET nama_penumpang='{nama}', alamat='{alamat}', no_telp={noTelp}, tgl_pemesanan='{tglPesan}' WHERE id={getRow['id']}"
-
-        # print(queryUpdate)
 
         cursor = conn.cursor()
         cursor.execute(queryUpdate)
