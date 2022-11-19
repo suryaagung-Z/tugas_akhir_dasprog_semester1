@@ -32,11 +32,16 @@ class MyFunction(Database):
         alamat   = input("Alamat : ").strip()
         noTelp   = input("No.telp : ").strip()
         tglPesan = input("Tanggal Pemesanan : ").strip()
+        
+        if (nama=="" or alamat=="" or noTelp=="" or tglPesan==""):
+            self.message("Terdapat Data Yang Kosong!!!")
+            self.start()
+            return
 
         result = super().addData(nama=nama, alamat=alamat, noTelp=noTelp, tglPesan=tglPesan)
 
         if result.rowcount == 1:
-            print("\nData Berhasil Ditambah!!!\n")
+            self.message("Data Berhasil Ditambah!!!")
             self.start()
         print("\n")
             
@@ -44,7 +49,7 @@ class MyFunction(Database):
     def update(self):
         print("\n~~~~~~~~~~~~~~~~~~~~~~PERBARUI DATA~~~~~~~~~~~~~~~~~~~~~~\n")
         rowNum = input("Masukan nomor : ")
-        print("\nNOTE : \"ENTER\" jika tidak ingin diperbarui\n")
+        self.message("CATATAN : \"ENTER\" jika tidak ingin diperbarui")
 
         getRow = self.getByRow(rowNum)
         
@@ -62,7 +67,7 @@ class MyFunction(Database):
         result = super().updateData(id=getRow['id'], nama=nama, alamat=alamat, noTelp=noTelp, tglPesan=tglPesan)
 
         if result.rowcount == 1:
-            print("\nData Berhasil Diperbarui!!!\n")
+            self.message("Data Berhasil Diperbarui!!!")
             self.start()
         print("\n")
 
@@ -74,7 +79,7 @@ class MyFunction(Database):
         result = super().deleteData(rowNum)
 
         if result.rowcount == 1:
-            print("\nData Berhasil Dihapus!!!\n")
+            self.message("Data Berhasil Dihapus!!!")
             self.start()
         print("\n")
 
@@ -90,5 +95,8 @@ class MyFunction(Database):
         elif _next == "keluar":
             os.system("cls")
             quit()
-        elif _next == "":
+        else:
             self.nextstep()
+
+    def message(self, val):
+        print(f"\n{val}\n")
