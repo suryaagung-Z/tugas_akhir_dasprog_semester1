@@ -1,4 +1,4 @@
 import app
 
-ins = app.MyFunction()
+ins = app.Core()
 ins.start()

@@ -1,1 +1,1 @@
-from .function import MyFunction
+from .function import Core

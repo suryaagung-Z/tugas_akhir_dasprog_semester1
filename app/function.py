@@ -2,7 +2,7 @@ from .Database import Database
 from prettytable import PrettyTable
 import os
 
-class MyFunction(Database):
+class Core(Database):
     # Contructor
     def __init__(self):
         Database.__init__(self)
@@ -28,20 +28,20 @@ class MyFunction(Database):
     # Function Tambah Data
     def add(self):
         print("\n~~~~~~~~~~~~~~~~~~~~~~TAMBAH DATA~~~~~~~~~~~~~~~~~~~~~~\n")
-        nama     = input("Nama : ").strip()
-        alamat   = input("Alamat : ").strip()
-        noTelp   = input("No.telp : ").strip()
+        nama     = input("Nama              : ").strip()
+        alamat   = input("Alamat            : ").strip()
+        noTelp   = input("No.telp           : ").strip()
         tglPesan = input("Tanggal Pemesanan : ").strip()
         
         if (nama=="" or alamat=="" or noTelp=="" or tglPesan==""):
-            self.message("Terdapat Data Yang Kosong!!!")
+            self.message("Terdapat Data Yang Kosong")
             self.start()
             return
 
         result = super().addData(nama=nama, alamat=alamat, noTelp=noTelp, tglPesan=tglPesan)
 
         if result.rowcount == 1:
-            self.message("Data Berhasil Ditambah!!!")
+            self.message("Data Berhasil Ditambah")
             self.start()
         print("\n")
             
@@ -49,25 +49,38 @@ class MyFunction(Database):
     def update(self):
         print("\n~~~~~~~~~~~~~~~~~~~~~~PERBARUI DATA~~~~~~~~~~~~~~~~~~~~~~\n")
         rowNum = input("Masukan nomor : ")
-        self.message("CATATAN : \"ENTER\" jika tidak ingin diperbarui")
+        if ((rowNum == "") or (rowNum.isnumeric() == False)):
+            self.message("Data Tidak Ditemukan")
+            self.start()
+            return
 
         getRow = self.getByRow(rowNum)
+        if getRow == None:
+            self.message("Data Tidak Ditemukan")
+            self.start()
+            return
+
+        self.message("CATATAN : \"ENTER\" jika tidak ingin diperbarui")
         
-        nama     = input(f"Nama : {getRow['nama_penumpang']} -> ")
-        alamat   = input(f"Alamat : {getRow['alamat']} -> ")
-        noTelp   = input(f"No.Telp : {getRow['no_telp']} -> ")
+        nama     = input(f"Nama          : {getRow['nama_penumpang']} -> ")
+        alamat   = input(f"Alamat        : {getRow['alamat']} -> ")
+        noTelp   = input(f"No.Telp       : {getRow['no_telp']} -> ")
         tglPesan = input(f"Tanggal Pesan : {getRow['tgl_pemesanan']} -> ")
 
-        d = ""
-        nama     = nama if (nama != d) else getRow['nama_penumpang']
-        alamat   = alamat if (alamat != d) else getRow['alamat']
-        noTelp   = int(noTelp) if (noTelp != d) else getRow['no_telp']
-        tglPesan = tglPesan if (tglPesan != d) else getRow['tgl_pemesanan']
+        if (nama=="" and alamat=="" and noTelp=="" and tglPesan==""):
+            self.message("Tidak Ada Yang Diperbarui")
+            self.start()
+            return
+
+        nama     = nama if (nama != "") else getRow['nama_penumpang']
+        alamat   = alamat if (alamat != "") else getRow['alamat']
+        noTelp   = int(noTelp) if (noTelp != "") else getRow['no_telp']
+        tglPesan = tglPesan if (tglPesan != "") else getRow['tgl_pemesanan']
 
         result = super().updateData(id=getRow['id'], nama=nama, alamat=alamat, noTelp=noTelp, tglPesan=tglPesan)
 
         if result.rowcount == 1:
-            self.message("Data Berhasil Diperbarui!!!")
+            self.message("Data Berhasil Diperbarui")
             self.start()
         print("\n")
 
@@ -75,23 +88,34 @@ class MyFunction(Database):
     def delete(self):
         print("\n~~~~~~~~~~~~~~~~~~~~~~HAPUS DATA~~~~~~~~~~~~~~~~~~~~~~\n")
         rowNum = input("Masukan nomor : ")
+        if ((rowNum == "") or (rowNum.isnumeric() == False)):
+            self.message("Data Tidak Ditemukan")
+            self.start()
+            return
         
         result = super().deleteData(rowNum)
+        if result == None:
+            self.message("Data Tidak Ditemukan")
+            self.start()
+            return
 
         if result.rowcount == 1:
-            self.message("Data Berhasil Dihapus!!!")
+            self.message("Data Berhasil Dihapus")
             self.start()
         print("\n")
 
     # Function step
     def nextstep(self):
-        _next = input("Aksi => (TAMBAH | PERBARUI | HAPUS | KELUAR) : ").lower()
+        _next = input("| TAMBAH | PERBARUI | HAPUS | KELUAR | => ").lower()
         if _next == "tambah":
             self.add()
         elif _next == "perbarui":
             self.update()
         elif _next == "hapus":
             self.delete()
+        elif _next == "bersihkan":
+            os.system("cls")
+            self.start()
         elif _next == "keluar":
             os.system("cls")
             quit()

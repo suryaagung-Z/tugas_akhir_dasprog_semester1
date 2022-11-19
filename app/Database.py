@@ -53,6 +53,9 @@ class Database:
 
     def deleteData(self, row):
         getRow = self.getByRow(row)
+        if getRow == None:
+            return
+            
         queryDelete = f"DELETE FROM {self.tableName} WHERE id={getRow['id']}"
 
         exe = self.execute(query=queryDelete, dict=False)
