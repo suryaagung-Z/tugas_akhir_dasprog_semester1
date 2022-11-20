@@ -10,12 +10,12 @@ class Database:
                 "password": "sury44gung123",
                 "database": "tpl_tugasakhir"
             }
-            self._conn = mcon.connect(**config)
+            self.__conn = mcon.connect(**config)
         except mcon.Error as err:
-            self._conn = f"Terdapat error : {err}"
+            self.__conn = f"Terdapat error : {err}"
 
     def execute(self, **params):
-        cursor = self._conn.cursor(dictionary=params['dict'])
+        cursor = self.__conn.cursor(dictionary=params['dict'])
         cursor.execute(params['query'])
         return cursor
 
@@ -26,7 +26,7 @@ class Database:
         return cursor.fetchone()
     
     def commit(self):
-        self._conn.commit()
+        self.__conn.commit()
 
     def getAll(self):
         query  = f"SELECT * FROM {self.tableName}"

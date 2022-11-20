@@ -5,11 +5,29 @@ import os
 class Core(Database):
     # Contructor
     def __init__(self):
-        Database.__init__(self)
+        super().__init__()
 
     def start(self):
         self.showTable()
         self.nextstep()
+
+    # Function step
+    def nextstep(self):
+        _next = input("| TAMBAH | PERBARUI | HAPUS | KELUAR | => ").lower()
+        if _next == "tambah":
+            self.add()
+        elif _next == "perbarui":
+            self.update()
+        elif _next == "hapus":
+            self.delete()
+        elif _next == "bersihkan":
+            os.system("cls")
+            self.start()
+        elif _next == "keluar":
+            os.system("cls")
+            quit()
+        else:
+            self.nextstep()
 
     # Function Tampilkan Semua Data Kedalam Tabel
     def showTable(self):
@@ -27,7 +45,7 @@ class Core(Database):
 
     # Function Tambah Data
     def add(self):
-        print("\n~~~~~~~~~~~~~~~~~~~~~~TAMBAH DATA~~~~~~~~~~~~~~~~~~~~~~\n")
+        self.heading("TAMBAH DATA")
         nama     = input("Nama              : ").strip()
         alamat   = input("Alamat            : ").strip()
         noTelp   = input("No.telp           : ").strip()
@@ -47,7 +65,7 @@ class Core(Database):
             
     # Function Perbarui Data
     def update(self):
-        print("\n~~~~~~~~~~~~~~~~~~~~~~PERBARUI DATA~~~~~~~~~~~~~~~~~~~~~~\n")
+        self.heading("PERBARUI")
         rowNum = input("Masukan nomor : ")
         if ((rowNum == "") or (rowNum.isnumeric() == False)):
             self.message("Data Tidak Ditemukan")
@@ -86,7 +104,7 @@ class Core(Database):
 
     # Function Hapus Data
     def delete(self):
-        print("\n~~~~~~~~~~~~~~~~~~~~~~HAPUS DATA~~~~~~~~~~~~~~~~~~~~~~\n")
+        self.heading("HAPUS DATA")
         rowNum = input("Masukan nomor : ")
         if ((rowNum == "") or (rowNum.isnumeric() == False)):
             self.message("Data Tidak Ditemukan")
@@ -104,23 +122,8 @@ class Core(Database):
             self.start()
         print("\n")
 
-    # Function step
-    def nextstep(self):
-        _next = input("| TAMBAH | PERBARUI | HAPUS | KELUAR | => ").lower()
-        if _next == "tambah":
-            self.add()
-        elif _next == "perbarui":
-            self.update()
-        elif _next == "hapus":
-            self.delete()
-        elif _next == "bersihkan":
-            os.system("cls")
-            self.start()
-        elif _next == "keluar":
-            os.system("cls")
-            quit()
-        else:
-            self.nextstep()
+    def heading(self, val):
+        print(f"\n~~~~~~~~~~~~~~~~~~~~~~{val}~~~~~~~~~~~~~~~~~~~~~~\n")
 
     def message(self, val):
         print(f"\n{val}\n")
