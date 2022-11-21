@@ -54,11 +54,10 @@ class Core(Database):
         noTelp   = input("No.telp : ").strip()
         tglPesan = input("Tanggal Pemesanan : ").strip()
         
-        if self.checkInputs(
-            check   = "",
-            values  = [nama, alamat, noTelp, tglPesan],
-            message = "Gagal : Terdapat Data Kosong"
-        ): return
+        if ((nama=="") or (alamat=="") or (noTelp=="") or (tglPesan=="")):
+            self.showNotif("Terdapat Data Kosong")
+            self.start()
+            return
 
         result = super().addData(nama=nama, alamat=alamat, noTelp=noTelp, tglPesan=tglPesan)
 
@@ -89,11 +88,10 @@ class Core(Database):
         noTelp   = input(f"No.Telp       : {getRow['no_telp']} -> ").strip()
         tglPesan = input(f"Tanggal Pesan : {getRow['tgl_pemesanan']} -> ").strip()
 
-        if self.checkInputs(
-            check   = "",
-            values  = [nama, alamat, noTelp, tglPesan],
-            message = "Gagal : Tidak Ada Yang Diperbarui"
-        ): return
+        if ((nama=="") and (alamat=="") and (noTelp=="") and (tglPesan=="")):
+            self.showNotif("Tidak Ada Data Yang Diperbarui")
+            self.start()
+            return
 
         nama     = nama if (nama != "") else getRow['nama_penumpang']
         alamat   = alamat if (alamat != "") else getRow['alamat']
@@ -140,10 +138,3 @@ class Core(Database):
             message = message,
             timeout = 2
         )
-
-    def checkInputs(self, **vals):
-        for val in vals['values']:
-            if val == vals['check']:
-                self.showNotif(vals['message'])
-                self.start()
-                return True
