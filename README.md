@@ -21,3 +21,11 @@ For Popup Notification
 ```bash
 pip install plyer
 ```
+
+## Run Program
+
+import db.sql to your mysql and run :
+
+```bash
+python app.py
+```
