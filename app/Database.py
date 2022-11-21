@@ -14,6 +14,18 @@ class Database:
         except mcon.Error as err:
             self.__conn = f"Terdapat error : {err}"
 
+    def createTable(self):
+        query = f"""CREATE TABLE IF NOT EXISTS {self.tableName} 
+                    (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+                        nama_penumpang VARCHAR(128) NOT NULL,
+                        alamat VARCHAR(128) NOT NULL,
+                        no_telp BIGINT(128) NOT NULL,
+                        tgl_pemesanan VARCHAR(128) NOT NULL
+                    )"""
+        self.execute(query=query, dict=False)
+        self.commit()
+
     def execute(self, **params):
         cursor = self.__conn.cursor(dictionary=params['dict'])
         cursor.execute(params['query'])

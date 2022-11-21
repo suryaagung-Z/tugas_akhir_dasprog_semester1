@@ -1,12 +1,14 @@
+import os
+import tkinter.messagebox as popup
 from .Database import Database
 from prettytable import PrettyTable
-import os
+from plyer import notification
 
 class Core(Database):
     # Contructor
     def __init__(self):
         super().__init__()
-
+    
     def start(self):
         self.showTable()
         self.nextstep()
@@ -31,6 +33,7 @@ class Core(Database):
 
     # Function Tampilkan Semua Data Kedalam Tabel
     def showTable(self):
+        super().createTable()
         result = super().getAll()
 
         pt = PrettyTable()
@@ -52,14 +55,14 @@ class Core(Database):
         tglPesan = input("Tanggal Pemesanan : ").strip()
         
         if (nama=="" or alamat=="" or noTelp=="" or tglPesan==""):
-            self.message("Terdapat Data Yang Kosong")
+            self.showNotif("Terdapat Data Yang Kosong")
             self.start()
             return
 
         result = super().addData(nama=nama, alamat=alamat, noTelp=noTelp, tglPesan=tglPesan)
 
         if result.rowcount == 1:
-            self.message("Data Berhasil Ditambah")
+            self.showNotif("Data Berhasil Ditambah")
             self.start()
         print("\n")
             
@@ -68,13 +71,13 @@ class Core(Database):
         self.heading("PERBARUI")
         rowNum = input("Masukan nomor : ")
         if ((rowNum == "") or (rowNum.isnumeric() == False)):
-            self.message("Data Tidak Ditemukan")
+            self.showNotif("Data Tidak Ditemukan")
             self.start()
             return
 
         getRow = self.getByRow(rowNum)
         if getRow == None:
-            self.message("Data Tidak Ditemukan")
+            self.showNotif("Data Tidak Ditemukan")
             self.start()
             return
 
@@ -86,7 +89,7 @@ class Core(Database):
         tglPesan = input(f"Tanggal Pesan : {getRow['tgl_pemesanan']} -> ")
 
         if (nama=="" and alamat=="" and noTelp=="" and tglPesan==""):
-            self.message("Tidak Ada Yang Diperbarui")
+            self.showNotif("Tidak Ada Yang Diperbarui")
             self.start()
             return
 
@@ -98,7 +101,7 @@ class Core(Database):
         result = super().updateData(id=getRow['id'], nama=nama, alamat=alamat, noTelp=noTelp, tglPesan=tglPesan)
 
         if result.rowcount == 1:
-            self.message("Data Berhasil Diperbarui")
+            self.showNotif("Data Berhasil Diperbarui")
             self.start()
         print("\n")
 
@@ -107,18 +110,18 @@ class Core(Database):
         self.heading("HAPUS DATA")
         rowNum = input("Masukan nomor : ")
         if ((rowNum == "") or (rowNum.isnumeric() == False)):
-            self.message("Data Tidak Ditemukan")
+            self.showNotif("Data Tidak Ditemukan")
             self.start()
             return
         
         result = super().deleteData(rowNum)
         if result == None:
-            self.message("Data Tidak Ditemukan")
+            self.showNotif("Data Tidak Ditemukan")
             self.start()
             return
 
         if result.rowcount == 1:
-            self.message("Data Berhasil Dihapus")
+            self.showNotif("Data Berhasil Dihapus")
             self.start()
         print("\n")
 
@@ -127,3 +130,10 @@ class Core(Database):
 
     def message(self, val):
         print(f"\n{val}\n")
+
+    def showNotif(self, message):
+        notification.notify(
+            title = "Informasi",
+            message = message,
+            timeout = 2
+        )
