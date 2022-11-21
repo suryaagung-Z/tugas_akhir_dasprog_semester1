@@ -49,15 +49,16 @@ class Core(Database):
     # Function Tambah Data
     def add(self):
         self.heading("TAMBAH DATA")
-        nama     = input("Nama              : ").strip()
-        alamat   = input("Alamat            : ").strip()
-        noTelp   = input("No.telp           : ").strip()
+        nama     = input("Nama : ").strip()
+        alamat   = input("Alamat : ").strip()
+        noTelp   = input("No.telp : ").strip()
         tglPesan = input("Tanggal Pemesanan : ").strip()
         
-        if (nama=="" or alamat=="" or noTelp=="" or tglPesan==""):
-            self.showNotif("Terdapat Data Yang Kosong")
-            self.start()
-            return
+        if self.checkInputs(
+            check   = "",
+            values  = [nama, alamat, noTelp, tglPesan],
+            message = "Gagal : Terdapat Data Kosong"
+        ): return
 
         result = super().addData(nama=nama, alamat=alamat, noTelp=noTelp, tglPesan=tglPesan)
 
@@ -71,27 +72,28 @@ class Core(Database):
         self.heading("PERBARUI")
         rowNum = input("Masukan nomor : ")
         if ((rowNum == "") or (rowNum.isnumeric() == False)):
-            self.showNotif("Data Tidak Ditemukan")
+            self.showNotif("Gagal : Data Tidak Ditemukan")
             self.start()
             return
 
         getRow = self.getByRow(rowNum)
         if getRow == None:
-            self.showNotif("Data Tidak Ditemukan")
+            self.showNotif("Gagal : Data Tidak Ditemukan")
             self.start()
             return
 
         self.message("CATATAN : \"ENTER\" jika tidak ingin diperbarui")
         
-        nama     = input(f"Nama          : {getRow['nama_penumpang']} -> ")
-        alamat   = input(f"Alamat        : {getRow['alamat']} -> ")
-        noTelp   = input(f"No.Telp       : {getRow['no_telp']} -> ")
-        tglPesan = input(f"Tanggal Pesan : {getRow['tgl_pemesanan']} -> ")
+        nama     = input(f"Nama          : {getRow['nama_penumpang']} -> ").strip()
+        alamat   = input(f"Alamat        : {getRow['alamat']} -> ").strip()
+        noTelp   = input(f"No.Telp       : {getRow['no_telp']} -> ").strip()
+        tglPesan = input(f"Tanggal Pesan : {getRow['tgl_pemesanan']} -> ").strip()
 
-        if (nama=="" and alamat=="" and noTelp=="" and tglPesan==""):
-            self.showNotif("Tidak Ada Yang Diperbarui")
-            self.start()
-            return
+        if self.checkInputs(
+            check   = "",
+            values  = [nama, alamat, noTelp, tglPesan],
+            message = "Gagal : Tidak Ada Yang Diperbarui"
+        ): return
 
         nama     = nama if (nama != "") else getRow['nama_penumpang']
         alamat   = alamat if (alamat != "") else getRow['alamat']
@@ -125,8 +127,9 @@ class Core(Database):
             self.start()
         print("\n")
 
+
     def heading(self, val):
-        print(f"\n~~~~~~~~~~~~~~~~~~~~~~{val}~~~~~~~~~~~~~~~~~~~~~~\n")
+        print(f"\n~~~~~~~~~~~~~~~~~~~~~~~~~~~{val}~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
 
     def message(self, val):
         print(f"\n{val}\n")
@@ -137,3 +140,10 @@ class Core(Database):
             message = message,
             timeout = 2
         )
+
+    def checkInputs(self, **vals):
+        for val in vals['values']:
+            if val == vals['check']:
+                self.showNotif(vals['message'])
+                self.start()
+                return True
