@@ -1,5 +1,4 @@
 import os
-import tkinter.messagebox as popup
 from .Database import Database
 from prettytable import PrettyTable
 from plyer import notification
