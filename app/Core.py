@@ -23,11 +23,10 @@ class Core(Database):
             self.update()
         elif _next == "hapus":
             self.delete()
-        elif _next == "bersihkan":
-            os.system("cls")
-            self.start()
         elif _next == "keluar":
+            # Bersihkan console
             os.system("cls")
+            # Keluar program
             quit()
         else:
             self.nextstep()
